@@ -33,7 +33,7 @@ def fetch_movie_details(movie_title):
         # Poster not available
         poster = data.get("Poster")
         if poster == "N/A" or not poster:
-            poster = "assets/images.png"
+            poster = "./assets/images.png"
 
         return {
             "title": data.get("Title", movie_title),

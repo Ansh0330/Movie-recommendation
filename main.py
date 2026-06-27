@@ -5,14 +5,18 @@ from sklearn.metrics.pairwise import linear_kernel
 import pandas as pd
 from omdb import fetch_movie_details
 from style import get_css, get_sidebar_html, render_movie_card_html
+from pathlib import Path
+
+BASE_DIR = Path(__file__).parent
+DATA_DIR = BASE_DIR / "data"
 
 # ------------------------------------------------
 # LOAD PICKLE FILES
 # ------------------------------------------------
-df = pickle.load(open("movies_df.pkl", "rb"))
-tfidf_matrix = pickle.load(open("tfidf_matrix.pkl", "rb"))
-indices = pickle.load(open("indices.pkl", "rb"))  # can return series/arrays
-tfidf = pickle.load(open("tfidf_vectorizer.pkl", "rb"))
+df = pickle.load(open(DATA_DIR / "movies_df.pkl", "rb"))
+tfidf_matrix = pickle.load(open(DATA_DIR / "tfidf_matrix.pkl", "rb"))
+indices = pickle.load(open(DATA_DIR / "indices.pkl", "rb"))
+tfidf = pickle.load(open(DATA_DIR / "tfidf_vectorizer.pkl", "rb"))
 
 # ------------------------------------------------
 # FIX B: Safe way to convert any index to a single int
