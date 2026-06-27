@@ -70,15 +70,26 @@ body, .stApp {
     background-color: var(--bg) !important;
 }
 
-/* Remove Streamlit default header/menu/footer padding */
+/* Make Streamlit header transparent — do NOT zero its height
+   because it hosts the sidebar expand/collapse toggle button */
 [data-testid="stHeader"] {
     background: transparent !important;
+    border-bottom: none !important;
+}
+
+/* Hide only the hamburger menu and footer — NOT the header itself */
+#MainMenu, footer {
+    visibility: hidden !important;
     height: 0 !important;
 }
 
-#MainMenu, footer, header {
-    visibility: hidden !important;
-    height: 0 !important;
+/* Always keep the sidebar collapse/expand button visible */
+[data-testid="stSidebarCollapsedControl"],
+[data-testid="collapsedControl"] {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    z-index: 999 !important;
 }
 
 /* Remove top-padding Streamlit adds by default */
