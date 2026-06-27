@@ -73,18 +73,16 @@ if st.button("Recommend"):
 
     st.subheader("🎬 Top Recommendations")
 
-    cols = st.columns(5)
+    for movie in results:
 
-    for idx, movie in enumerate(results):
+        st.image(movie["poster"], width=220)
 
-        with cols[idx % 5]:
+        st.markdown(f"### {movie['title']}")
 
-            st.image(movie["poster"], use_container_width=True)
+        st.write(f"⭐ IMDb Rating: {movie['rating']}")
+        st.write(f"📅 Year: {movie['year']}")
+        st.write(f"⏱ Runtime: {movie['runtime']}")
+        st.write(f"🎭 Genre: {movie['genre']}")
+        st.write(movie["plot"])
 
-            st.markdown(f"**{movie['title']}**")
-
-            st.caption(f"⭐ {movie['rating']}")
-
-            st.caption(f"📅 {movie['year']}")
-
-            st.caption(movie["genre"])
+        st.divider()
