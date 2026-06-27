@@ -111,14 +111,22 @@ body, .stApp {
 /* ============================================================
    SIDEBAR
    ============================================================ */
+/* Remove Streamlit's stacked top padding — brings logo flush to top */
 [data-testid="stSidebar"] {
     background-color: var(--bg-secondary) !important;
     border-right: 1px solid var(--border) !important;
-    padding-top: 1.5rem !important;
+    padding-top: 0 !important;
 }
 
 [data-testid="stSidebar"] > div:first-child {
-    padding: 1.5rem 1.25rem !important;
+    padding: 0.5rem 1.25rem 1.5rem !important;
+}
+
+/* Streamlit's inner scrollable content wrapper */
+[data-testid="stSidebarContent"],
+section[data-testid="stSidebar"] > div > div {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
 }
 
 /* Sidebar logo area */
