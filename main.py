@@ -3,6 +3,7 @@ import pickle
 import numpy as np
 from sklearn.metrics.pairwise import linear_kernel
 import pandas as pd
+from omdb import fetch_movie_details
 
 # ------------------------------------------------
 # LOAD PICKLE FILES
@@ -26,28 +27,35 @@ def _get_single_index(idx):
 # ------------------------------------------------
 def recommend(title, n=10):
     if title not in indices:
-        return ["Movie not found in dataset"]
+        return []
 
     raw_idx = indices[title]
-    idx = _get_single_index(raw_idx)  # FIX B — ensure scalar int
+    idx = _get_single_index(raw_idx)
 
-    # compute similarity ONLY for this movie (doesn't crash RAM)
+    # similarity scores
     sim_scores = linear_kernel(tfidf_matrix[idx], tfidf_matrix).flatten()
 
-    # sort by similarity
+    # sort
     sorted_idx = np.argsort(sim_scores)[::-1]
 
-    # remove itself (must compare with scalar)
+    # remove selected movie
     sorted_idx = sorted_idx[sorted_idx != idx]
 
-    # pick top n
+    # top recommendations
     sorted_idx = sorted_idx[:n]
 
-    # safety: only indices within df size
-    sorted_idx = [i for i in sorted_idx if 0 <= i < len(df)]
+    recommendations = []
 
-    # return titles
-    return df['title'].iloc[sorted_idx].tolist()
+    for i in sorted_idx:
+        if 0 <= i < len(df):
+            movie_title = df.iloc[i]["title"]
+
+            # Fetch details from OMDb
+            movie = fetch_movie_details(movie_title)
+
+            recommendations.append(movie)
+
+    return recommendations
 
 
 # ------------------------------------------------
@@ -62,6 +70,21 @@ selected_movie = st.selectbox("Choose a movie:", movie_list)
 
 if st.button("Recommend"):
     results = recommend(selected_movie)
-    st.subheader("📌 Recommendations:")
-    for m in results:
-        st.write("👉", m)
+
+    st.subheader("🎬 Top Recommendations")
+
+    cols = st.columns(5)
+
+    for idx, movie in enumerate(results):
+
+        with cols[idx % 5]:
+
+            st.image(movie["poster"], use_container_width=True)
+
+            st.markdown(f"**{movie['title']}**")
+
+            st.caption(f"⭐ {movie['rating']}")
+
+            st.caption(f"📅 {movie['year']}")
+
+            st.caption(movie["genre"])
